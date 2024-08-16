@@ -32,7 +32,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
         <Providers>
           <CommonLayout>{children}</CommonLayout>
 
-          <Toaster position="top-right" richColors />
+          <Toaster position="top-right" />
         </Providers>
       </body>
     </html>

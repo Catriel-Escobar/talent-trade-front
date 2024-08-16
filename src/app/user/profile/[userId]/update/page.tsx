@@ -1,6 +1,5 @@
 'use client';
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import api from '@/lib/axios';
 import Image from 'next/image';
@@ -24,7 +23,6 @@ interface IFormInput {
 }
 
 const EditProfile = () => {
-  const router = useRouter();
   const { specialties: specialtiesOptions, categories } = useSpecialties();
 
   const {
@@ -51,12 +49,7 @@ const EditProfile = () => {
     Pick<Interest, 'categoryId' | 'specialtyId'>[]
   >([]);
 
-  const banners = [
-    '/banners/banner1.jpg',
-    '/banners/banner2.jpg',
-    '/banners/banner3.jpg',
-    '/banners/banner4.jpg',
-  ];
+  const banners = ['banner1.jpg', 'banner2.jpg', 'banner3.jpg'];
 
   const { user, setUser } = useAuth();
 
@@ -219,6 +212,7 @@ const EditProfile = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     if (selectedSpecialties.length === 0 || selectedInterests.length === 0) {
+      // alert('Please select at least one specialty and one interest.');
       toast.error('Please select at least one specialty and one interest.');
       return;
     }
@@ -283,7 +277,6 @@ const EditProfile = () => {
           interests: userInterests,
         });
         toast.success('User updated successfully');
-        router.push(`/user/profile/${user?._id}`);
       }
     } catch (error) {
       console.log(error);
@@ -302,10 +295,7 @@ const EditProfile = () => {
       >
         <div className="mb-4 border-b-1 border-gray-300 pb-7">
           <label className="block text-gray-700">
-            Profile Photo{' '}
-            <span className="text-gray-800 text-xs font-medium">
-              (No need to submit the form, just upload the image)
-            </span>
+            Profile Photo <span className='text-gray-800 text-xs font-medium'>(No need to submit the form, just upload the image)</span>
           </label>
           <input
             type="file"
@@ -329,15 +319,16 @@ const EditProfile = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700">Select a Profile Banner</label>
+          <label className="block text-gray-700">Banner Photo</label>
           <select
             value={bannerImage || ''}
             onChange={(e) => setBannerImage(e.target.value)}
             className="mt-2 p-2 border rounded w-full"
           >
+            <option value="">Select a banner</option>
             {banners.map((banner, index) => (
-              <option key={index} value={banner}>
-                {`Banner ${index + 1}`}
+              <option key={index} value={`/banners/${banner}`}>
+                {banner}
               </option>
             ))}
           </select>
